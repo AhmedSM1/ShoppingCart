@@ -1,4 +1,4 @@
-package com.ahmed.shopping_cart.model;
+package com.ahmed.shopping_cart.data;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

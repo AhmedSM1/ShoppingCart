@@ -1,6 +1,4 @@
-package com.ahmed.shopping_cart.model;
-
-import java.io.Serializable;
+package com.ahmed.shopping_cart.data;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;

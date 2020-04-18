@@ -1,4 +1,4 @@
-package com.ahmed.shopping_cart.model;
+package com.ahmed.shopping_cart.data;
 
 
 public class CartItemDto{

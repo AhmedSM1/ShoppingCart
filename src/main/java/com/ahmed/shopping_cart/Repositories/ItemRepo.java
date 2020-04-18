@@ -1,6 +1,6 @@
 package com.ahmed.shopping_cart.Repositories;
 
-import com.ahmed.shopping_cart.model.Item;
+import com.ahmed.shopping_cart.data.Item;
 
 import org.springframework.data.repository.CrudRepository;
 

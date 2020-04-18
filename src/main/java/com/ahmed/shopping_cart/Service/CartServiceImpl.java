@@ -6,7 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.ahmed.shopping_cart.Repositories.CartRepo;
-import com.ahmed.shopping_cart.model.Cart;
+import com.ahmed.shopping_cart.data.Cart;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

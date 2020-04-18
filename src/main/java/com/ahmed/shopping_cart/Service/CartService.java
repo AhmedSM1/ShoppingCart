@@ -3,7 +3,7 @@ package com.ahmed.shopping_cart.Service;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.ahmed.shopping_cart.model.Cart;
+import com.ahmed.shopping_cart.data.Cart;
 
 import org.springframework.validation.annotation.Validated;
 

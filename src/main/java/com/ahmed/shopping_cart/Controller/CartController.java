@@ -2,18 +2,20 @@ package com.ahmed.shopping_cart.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import com.ahmed.shopping_cart.Repositories.CartRepo;
+import com.ahmed.shopping_cart.Repositories.ItemRepo;
 import com.ahmed.shopping_cart.Service.CartItemService;
 import com.ahmed.shopping_cart.Service.CartService;
 import com.ahmed.shopping_cart.Service.ItemService;
-import com.ahmed.shopping_cart.model.Cart;
-import com.ahmed.shopping_cart.model.CartItem;
-import com.ahmed.shopping_cart.model.CartItemDto;
+import com.ahmed.shopping_cart.data.Cart;
+import com.ahmed.shopping_cart.data.CartItem;
+import com.ahmed.shopping_cart.data.CartItemDto;
 
+import com.ahmed.shopping_cart.data.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,60 +37,35 @@ public class CartController{
         ItemService itemService;
         @Autowired
         CartItemService cartItemService;
-
-    
         @Autowired
         CartRepo repo;
-      
-
-      //   @GetMapping
-      //   @ResponseStatus(HttpStatus.OK)
-      //   public @NotNull Iterable<Cart> getCarts(){
-      //         return this.cartService.getAllCarts();
-      //   }
+        @Autowired
+        ItemRepo itemRepo;
 
 
       @GetMapping
+      @ResponseStatus(HttpStatus.OK)
       public Iterable<Cart> getAllCarts(){
-
           return  repo.findAll();
       }
 
         @PostMapping
+        @ResponseStatus(HttpStatus.CREATED)
         public ResponseEntity<Cart> create(@RequestBody @Valid List<CartItemDto> itemsRequested){
-          
-         
           Cart cart = new Cart();
-         
-       
           cart = this.cartService.create(cart);
-
-          
-          
-
- 
           List<CartItem> cartItems = new ArrayList<>();
-
-
           for (CartItemDto dto : itemsRequested) {
-
-           cartItems.add(cartItemService.create(
+              Optional<Item> item = itemRepo.findById(dto.getItem().getItemId());
+              cartItems.add(cartItemService.create(
                  new CartItem(
-            cart, 
-           itemService.getItemById(dto.getItem().getItemId()), dto.getQuantity())
-           
-           )); }
-       
+            cart,item.get(), dto.getQuantity())
+           ));
+          }
            cart.setCartItems(cartItems);
-
            this.cartService.update(cart);
-
            return ResponseEntity.status(HttpStatus.CREATED).body(cart);
         }
-
-
-       
-
     }
 
     
