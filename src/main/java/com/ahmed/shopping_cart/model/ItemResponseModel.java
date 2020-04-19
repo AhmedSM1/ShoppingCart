@@ -16,6 +16,16 @@ public class ItemResponseModel {
     public ItemResponseModel() {
     }
 
+    @Override
+    public String toString() {
+        return "ItemResponseModel{" +
+                "itemTitle='" + itemTitle + '\'' +
+                ", itemPrice=" + itemPrice +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                '}';
+    }
+
     public String getItemTitle() {
         return itemTitle;
     }

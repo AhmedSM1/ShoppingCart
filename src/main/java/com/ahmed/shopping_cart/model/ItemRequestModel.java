@@ -16,6 +16,16 @@ public class ItemRequestModel {
     public ItemRequestModel() {
     }
 
+    @Override
+    public String toString() {
+        return "ItemRequestModel{" +
+                "itemTitle='" + itemTitle + '\'' +
+                ", itemPrice=" + itemPrice +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                '}';
+    }
+
     public String getItemTitle() {
         return itemTitle;
     }

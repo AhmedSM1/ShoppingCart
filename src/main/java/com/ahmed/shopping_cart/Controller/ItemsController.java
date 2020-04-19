@@ -38,7 +38,7 @@ public class ItemsController {
     @GetMapping(value = ("/{itemID}"))
     public ResponseEntity<ItemResponseModel> getItemById(@PathVariable("itemID") Long id){
         ItemResponseModel res = this.service.getItemById(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
 
