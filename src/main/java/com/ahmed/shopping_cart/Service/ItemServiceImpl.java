@@ -36,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemResponseModel> getAllItems() {
-            List<Item> itemList = itemRepo.findAll();
+            List<Item> itemList = itemRepo.nativeGetAllItems();
             return itemList.stream().map(b->new ItemResponseModel(
                     b.getItemTitle(),
                     b.getItemPrice(),
@@ -52,14 +52,17 @@ public class ItemServiceImpl implements ItemService {
         item.setItemPrice(entry.getItemPrice());
         item.setItemDescription(entry.getItemDescription());
         item.setPictureUrl(entry.getPictureUrl());
-        itemRepo.save(item);
+        itemRepo.nativeInset(item.getItemTitle(),item.getItemPrice(),item.getItemDescription(),item.getPictureUrl());
         return item;
     }
 
 
     @Override
     public ItemResponseModel getItemById(Long id) {
-        Item item = itemRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException());
+        Item item = itemRepo.nativeGetItemByID(id);
+        if (item == null) throw new ResourceNotFoundException();
+
+        // Item item = itemRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException());
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         ItemResponseModel dto = modelMapper.map(item,ItemResponseModel.class);
@@ -69,7 +72,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public String deleteItem( Long id) {
       Item item = itemRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException());
-      itemRepo.delete(item);
+      itemRepo.nativeDeleteItem(id);
       return item.getItemTitle()+" have been deleted";
     }
 
