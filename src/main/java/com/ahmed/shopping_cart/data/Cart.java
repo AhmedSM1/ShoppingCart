@@ -31,12 +31,12 @@ public class Cart{
     @JsonFormat(pattern = "dd/MM/yyyy") 
     private LocalDate dateCreated;
 
-    
-
- 
     @OneToMany(mappedBy = "primaryKey.cart")
     @Valid
     private List<CartItem> cartItems = new ArrayList<>();
+
+    private double totalPrice;
+
 
     public Long getId() {
         return id;
@@ -67,7 +67,6 @@ public class Cart{
         return this.cartItems.size();
     }
 
-
     //Cart Total Price
     @Transient
     public Double getTotalPrice() {
@@ -79,7 +78,4 @@ public class Cart{
 
         return sum;
     }
-
-
-
 }

@@ -7,11 +7,14 @@ import com.ahmed.shopping_cart.data.Item;
 
 import com.ahmed.shopping_cart.model.ItemRequestModel;
 import com.ahmed.shopping_cart.model.ItemResponseModel;
+import com.ahmed.shopping_cart.model.ItemUpdateModel;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.List;
 
 @Validated
 public interface ItemService {
-    Iterable<Item> getAllItemss();
+    List<ItemResponseModel> getAllItems();
 
     Item addItem(@NotNull(message = "item cannot be null") ItemRequestModel entry);
     
@@ -19,5 +22,5 @@ public interface ItemService {
 
 	String deleteItem(Long id);
 	
-	Item editItem(Item item);
+	ItemResponseModel editItem(long id , ItemUpdateModel updateModel);
 }

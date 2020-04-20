@@ -6,6 +6,14 @@ public class CartItemDto{
     private Item item;
     private int quantity;
 
+    public CartItemDto() {
+    }
+
+    public CartItemDto(Item item, int quantity) {
+        this.item = item;
+        this.quantity = quantity;
+    }
+
     public Item getItem() {
         return item;
     }

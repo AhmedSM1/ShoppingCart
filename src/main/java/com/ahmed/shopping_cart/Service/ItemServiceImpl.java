@@ -4,20 +4,23 @@ package com.ahmed.shopping_cart.Service;
 
 
 import com.ahmed.shopping_cart.Repositories.ItemRepo;
+import com.ahmed.shopping_cart.data.Cart;
 import com.ahmed.shopping_cart.data.Item;
 
+import com.ahmed.shopping_cart.model.CartResponseModel;
 import com.ahmed.shopping_cart.model.ItemRequestModel;
 import com.ahmed.shopping_cart.model.ItemResponseModel;
+import com.ahmed.shopping_cart.model.ItemUpdateModel;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,10 +33,16 @@ public class ItemServiceImpl implements ItemService {
         this.itemRepo = itemRepo;
     }
 
+
     @Override
-    public Iterable<Item> getAllItemss() {
-       Iterable<Item> itemList = itemRepo.findAll();
-        return itemList;
+    public List<ItemResponseModel> getAllItems() {
+            List<Item> itemList = itemRepo.findAll();
+            return itemList.stream().map(b->new ItemResponseModel(
+                    b.getItemTitle(),
+                    b.getItemPrice(),
+                    b.getItemDescription(),
+                    b.getPictureUrl()))
+                    .collect(Collectors.toList());
     }
 
     @Override
@@ -59,23 +68,21 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public String deleteItem( Long id) {
-    //   Item item = itemRepo.findById(id);
-        
-    //    itemRepo.delete(item);
-      return "Item have been deleted";
-
+      Item item = itemRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException());
+      itemRepo.delete(item);
+      return item.getItemTitle()+" have been deleted";
     }
 
     @Override
-    public Item editItem( Item updatedItem) {
-       Item item = itemRepo.findById(updatedItem.getItemId()).orElseThrow(() -> new ResourceNotFoundException());
-       item.setItemTitle(updatedItem.getItemTitle());
-       item.setItemDescription(updatedItem.getItemDescription());
-       item.setItemPrice(updatedItem.getItemPrice());
-       itemRepo.save(item);
-       return item;
-
+    public ItemResponseModel editItem(long id, ItemUpdateModel updatedItem) {
+        Item item = itemRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        item.setItemTitle(updatedItem.getItemTitle());
+        item.setItemDescription(updatedItem.getItemDescription());
+        item.setItemPrice(updatedItem.getItemPrice());
+        this.itemRepo.save(item);
+        return new ItemResponseModel(item.getItemTitle(),item.getItemPrice(),item.getItemDescription(),item.getPictureUrl());
     }
+
 
   
 

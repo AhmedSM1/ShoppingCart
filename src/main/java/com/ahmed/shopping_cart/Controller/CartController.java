@@ -16,6 +16,8 @@ import com.ahmed.shopping_cart.data.CartItem;
 import com.ahmed.shopping_cart.data.CartItemDto;
 
 import com.ahmed.shopping_cart.data.Item;
+import com.ahmed.shopping_cart.model.CartRequestModel;
+import com.ahmed.shopping_cart.model.CartResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,44 +30,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/cart")
-public class CartController{
-
-     
-        @Autowired
-        CartService cartService;
-        @Autowired
-        ItemService itemService;
-        @Autowired
-        CartItemService cartItemService;
-        @Autowired
-        CartRepo repo;
-        @Autowired
-        ItemRepo itemRepo;
+public class CartController {
+    @Autowired
+    CartService service;
 
 
-      @GetMapping
-      @ResponseStatus(HttpStatus.OK)
-      public Iterable<Cart> getAllCarts(){
-          return  repo.findAll();
-      }
 
-        @PostMapping
-        @ResponseStatus(HttpStatus.CREATED)
-        public ResponseEntity<Cart> create(@RequestBody @Valid List<CartItemDto> itemsRequested){
-          Cart cart = new Cart();
-          cart = this.cartService.create(cart);
-          List<CartItem> cartItems = new ArrayList<>();
-          for (CartItemDto dto : itemsRequested) {
-              Optional<Item> item = itemRepo.findById(dto.getItem().getItemId());
-              cartItems.add(cartItemService.create(
-                 new CartItem(
-            cart,item.get(), dto.getQuantity())
-           ));
-          }
-           cart.setCartItems(cartItems);
-           this.cartService.update(cart);
-           return ResponseEntity.status(HttpStatus.CREATED).body(cart);
-        }
+    @GetMapping
+    public ResponseEntity<List<CartResponseModel>> getAllCart(){
+        return new ResponseEntity<>(service.getAllCarts(), HttpStatus.OK);
     }
 
-    
+    @PostMapping
+    public ResponseEntity<CartResponseModel> create(@RequestBody List<CartItemDto> cartItemDtoList){
+        return new ResponseEntity<>(service.create(cartItemDtoList), HttpStatus.CREATED);
+    }
+
+
+}

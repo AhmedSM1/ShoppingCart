@@ -10,14 +10,16 @@ import com.ahmed.shopping_cart.data.Item;
 
 import com.ahmed.shopping_cart.model.ItemRequestModel;
 import com.ahmed.shopping_cart.model.ItemResponseModel;
+import com.ahmed.shopping_cart.model.ItemUpdateModel;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -42,11 +44,9 @@ public class ItemsController {
     }
 
 
-
     @GetMapping
-    public ResponseEntity<Iterable<Item>> getAll(){
-        Iterable<Item> items = service.getAllItemss();
-        return ResponseEntity.status(HttpStatus.OK).body(items);
+    public ResponseEntity<List<ItemResponseModel>> getAllItems(){
+        return new ResponseEntity<>(service.getAllItems(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{itemID}")
@@ -56,12 +56,11 @@ public class ItemsController {
 
     }
 
-    @PutMapping()
-    public ResponseEntity<Item> updateItems(@Valid @RequestBody Item updated)
-    throws ResourceNotFoundException
+    @PutMapping(value ="/{itemID}" )
+    public ResponseEntity<ItemResponseModel> updateItems(@PathVariable("itemID") long id ,@Valid @RequestBody ItemUpdateModel updated)
     {
-          Item item = service.editItem(updated);
-        return ResponseEntity.status(HttpStatus.OK).body(item);
+       ItemResponseModel res = service.editItem(id,updated);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
 }
